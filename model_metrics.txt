@@ -1,0 +1,48 @@
+MODEL METRICS FILE
+Capstone Three: USA Real Estate Market Analysis
+Author: Daksha Gummadi
+
+PROBLEM
+Predict residential listing price from property features and location.
+Response variable: log of listing price (continuous, regression problem).
+
+DATA
+Source file: realtor_cleaned_merged.csv (2,221,128 listings)
+Modeling sample: 300,000 random rows (random_state=42)
+After dropping rows missing Census data: 297,965 rows
+Train/test split: 80/20 (training 238,372 rows, testing 59,593 rows)
+Features after dummy encoding: 62 columns
+
+FINAL MODEL
+Algorithm: Random Forest Regressor (scikit-learn)
+
+FEATURES (before dummy encoding)
+Numeric (standardized with StandardScaler):
+bed, bath, acre_lot, house_size, listing_count_zip,
+median_hh_income, unemployment_rate, poverty_pct, occupied_units
+Categorical (converted to dummies with drop_first=True):
+status, state
+
+HYPERPARAMETERS (selected by GridSearchCV, 3-fold CV, scoring=r2)
+n_estimators: 100
+max_depth: 20
+random_state: 42
+
+PERFORMANCE ON TEST SET (target = log price)
+Model                  RMSE     R_squared
+Linear Regression      0.8491   0.4341
+Ridge Regression       0.8491   0.4341
+Random Forest          0.6014   0.7161
+Tuned Random Forest    0.5661   0.7485   <- final model
+
+TOP 10 FEATURE IMPORTANCES (Tuned Random Forest)
+bath               0.2803
+median_hh_income   0.1674
+house_size         0.1553
+acre_lot           0.1312
+occupied_units     0.0563
+listing_count_zip  0.0407
+state_California   0.0367
+poverty_pct        0.0262
+unemployment_rate  0.0200
+state_New_York     0.0120
